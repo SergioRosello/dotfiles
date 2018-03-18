@@ -9,6 +9,7 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
+#set $term --no-startup-id termite
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -30,7 +31,8 @@ font pango:monospace 9
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec termite
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -166,7 +168,7 @@ assign [class="qutebrowser"] $workspace1
 assign [class="Google-chrome"] $workspace1
 assign [class="TelegramDesktop"] $workspace8
 assign [class="Slack"] $workspace8
-assign [class="Spotify"] $workspace9
+assign [class="spotify"] $workspace9
 assign [class="Synergy"] $workspace0
 
 # reload the configuration file
@@ -248,6 +250,16 @@ bindsym XF86AudioPrev exec --no-startup-id dbus-send --print-reply --dest=org.mp
 # Stop
 bindsym XF86AudioStop exec --no-startup-id dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop
 
+#Dropdown terminal
+#exec --no-startup-id termite --name dropdown
+#bindsym $mod+t [instance="dropdown"] scratchpad show; move position center
+
+
+#for_window [instance="dropdown"] floating enable
+#for_window [instance="dropdown"] move scratchpad
+#exec --no-startup-id $term -t dropdown -e tmux a || tmux
+#bindsym $mod+t [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
+
 
 #Screen brightness keys
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10 # increase screen brightness
@@ -274,4 +286,4 @@ exec_always feh --bg-scale /home/sergio/Pictures/Wallpaper.*
 bindsym $mod+x [urgent=latest] focus
 
 #Remove screentair issue
-exec compton -CGb --no-fading-openclose
+exec_always compton -CGb --no-fading-openclose
