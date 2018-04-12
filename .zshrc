@@ -113,13 +113,14 @@ alias womp="vim ~/Documents/Universidad/Practicas/*.tex"
 
 # Simply command shortcuts
 alias r="ranger"
+alias ru="ranger ~/Documents/Universidad"
 alias cal="cal -m"
 
 ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir $ZSH_CACHE_DIR
 fi
-
+export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 path+=('/home/sergio/.vscode-oss/extensions/ms-vscode.csharp-1.13.1/.omnisharp/run')
 export PATH
 

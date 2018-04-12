@@ -168,7 +168,7 @@ assign [class="qutebrowser"] $workspace1
 assign [class="Google-chrome"] $workspace1
 assign [class="TelegramDesktop"] $workspace8
 assign [class="Slack"] $workspace8
-assign [class="spotify"] $workspace9
+assign [class="Spotify"] $workspace9
 assign [class="Synergy"] $workspace0
 
 # reload the configuration file
@@ -271,7 +271,7 @@ bindsym --release $mod+Insert exec scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictur
 
 #Start Spotify
 #this starts Spotify when $mod + XF86AudioPlay
-bindsym $mod+XF86AudioPlay exec --no-startup-id spotify
+bindsym $mod+XF86AudioPlay exec --no-startup-id Spotify
 
 #Lock the screen
 bindsym $mod+b exec --no-startup-id i3lock
