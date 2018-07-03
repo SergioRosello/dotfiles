@@ -121,7 +121,11 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir $ZSH_CACHE_DIR
 fi
 export GEM_HOME=$(ruby -e 'print Gem.user_dir')
+export ANDROID_HOME=/home/sergio/Android/Sdk
+export PATH=$ANDROID_HOME/tools:$PATH
+export PATH=$ANDROID_HOME/platform-tools:$PATH
 path+=('/home/sergio/.vscode-oss/extensions/ms-vscode.csharp-1.13.1/.omnisharp/run')
+path+=($(ruby -e 'print Gem.user_dir')/bin)
 export PATH
 
 source $ZSH/oh-my-zsh.sh
