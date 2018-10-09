@@ -120,13 +120,17 @@ ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir $ZSH_CACHE_DIR
 fi
-export GEM_HOME=$(ruby -e 'print Gem.user_dir')
+#export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 export ANDROID_HOME=/home/sergio/Android/Sdk
 export PATH=$ANDROID_HOME/tools:$PATH
 export PATH=$ANDROID_HOME/platform-tools:$PATH
 path+=('/home/sergio/.vscode-oss/extensions/ms-vscode.csharp-1.13.1/.omnisharp/run')
-path+=($(ruby -e 'print Gem.user_dir')/bin)
+#path+=($(ruby -e 'print Gem.user_dir')/bin)
 export PATH
 
 source $ZSH/oh-my-zsh.sh
 export VISUAL=vim
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
