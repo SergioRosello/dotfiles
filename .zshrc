@@ -124,8 +124,11 @@ fi
 export ANDROID_HOME=/home/sergio/Android/Sdk
 export PATH=$ANDROID_HOME/tools:$PATH
 export PATH=$ANDROID_HOME/platform-tools:$PATH
+export PATH=$ANDROID_HOME/emulator:$PATH
 path+=('/home/sergio/.vscode-oss/extensions/ms-vscode.csharp-1.13.1/.omnisharp/run')
 #path+=($(ruby -e 'print Gem.user_dir')/bin)
+export GOPATH=$(go env GOPATH)
+export PATH=$PATH:$(go env GOPATH)/bin
 export PATH
 
 source $ZSH/oh-my-zsh.sh
