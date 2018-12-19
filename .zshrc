@@ -104,12 +104,12 @@ alias ct="vim ~/.config/termite/config"
 alias cpb="vim ~/.config/polybar/config"
 alias cco="vim ~/.config/compton/compton.conf"
 
+# Managing terminal as vim
+alias :q=exit
+alias :e=vim
+
 # Documentation files
 alias dvvt="vim ~/.vim/bundle/vimtex/doc/vimtex.txt"
-
-# Current projects
-alias wotfg="vim ~/Documents/Universidad/TFG/*.tex"
-alias womp="vim ~/Documents/Universidad/Practicas/*.tex"
 
 # Simply command shortcuts
 alias r="ranger"
