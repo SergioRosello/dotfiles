@@ -9,7 +9,7 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-#set $term --no-startup-id termite
+set $term --no-startup-id termite
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -251,12 +251,12 @@ bindsym XF86AudioPrev exec --no-startup-id dbus-send --print-reply --dest=org.mp
 bindsym XF86AudioStop exec --no-startup-id dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop
 
 #Dropdown terminal
-#exec --no-startup-id termite --name dropdown
-#bindsym $mod+t [instance="dropdown"] scratchpad show; move position center
+exec --no-startup-id $term --title scratchterm
+for_window [title="scratchterm"] floating enable, resize set 940 600, move position center
+for_window [title="scratchterm"] move scratchpad
+bindsym $mod+t [title="scratchterm"] scratchpad show
 
 
-#for_window [instance="dropdown"] floating enable
-#for_window [instance="dropdown"] move scratchpad
 #exec --no-startup-id $term -t dropdown -e tmux a || tmux
 #bindsym $mod+t [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
 

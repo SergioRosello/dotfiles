@@ -1,6 +1,9 @@
 execute pathogen#infect()
+" change mapleader to <space> instead of <backslash>
+let mapleader = " "
 syntax on
 filetype plugin indent on
+set nocompatible
 set autowrite
 set virtualedit=onemore
 set history=1000

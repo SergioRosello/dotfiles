@@ -112,8 +112,8 @@ alias :e=vim
 alias dvvt="vim ~/.vim/bundle/vimtex/doc/vimtex.txt"
 
 # Simply command shortcuts
+alias n="nnn"
 alias r="ranger"
-alias ru="ranger ~/Documents/Universidad"
 alias cal="cal -m"
 
 ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
