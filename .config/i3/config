@@ -90,7 +90,8 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+# Commented out because of conflict with scratchpad
+#bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
@@ -254,7 +255,7 @@ bindsym XF86AudioStop exec --no-startup-id dbus-send --print-reply --dest=org.mp
 exec --no-startup-id $term --title scratchterm
 for_window [title="scratchterm"] floating enable, resize set 940 600, move position center
 for_window [title="scratchterm"] move scratchpad
-bindsym $mod+t [title="scratchterm"] scratchpad show
+bindsym $mod+s [title="scratchterm"] scratchpad show
 
 
 #exec --no-startup-id $term -t dropdown -e tmux a || tmux
@@ -266,8 +267,8 @@ bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10 # increase s
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10 # decrease screen brightness
 
 #Screenshot key
-bindsym --release Insert exec scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/'
-bindsym --release $mod+Insert exec scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/'
+bindsym --release Insert exec flameshot gui
+bindsym --release $mod+Insert exec flameshot gui
 
 #Start Spotify
 #this starts Spotify when $mod + XF86AudioPlay

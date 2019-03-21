@@ -62,7 +62,6 @@ plugins=(
   git z
 )
 
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -120,6 +119,8 @@ ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir $ZSH_CACHE_DIR
 fi
+#export java home
+export JAVA_HOME=/usr/lib/jvm/java-8-jdk/bin/java
 #export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 export ANDROID_HOME=/home/sergio/Android/Sdk
 export PATH=$ANDROID_HOME/tools:$PATH
@@ -134,6 +135,9 @@ export PATH
 source $ZSH/oh-my-zsh.sh
 export VISUAL=vim
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# This line slows down the entrie loading process.
+source /usr/share/nvm/init-nvm.sh
+
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+source "$HOME/.rvm/scripts/rvm"
 export PATH="$PATH:$HOME/.rvm/bin"

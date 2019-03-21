@@ -1,6 +1,5 @@
 execute pathogen#infect()
-" change mapleader to <space> instead of <backslash>
-let mapleader = " "
+let mapleader = ","
 syntax on
 filetype plugin indent on
 set nocompatible
@@ -27,3 +26,14 @@ set softtabstop=0
 set shiftwidth=2
 set tabstop=2
 " End changes tabs to spaces
+"
+" Start of personal maps for vim
+"
+" Resize window without the need of Ctrl-w + +
+" Directly with <leader> + + or <leader> + -
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+" Create a skeleton file for wave issues.
+" Change tabs with hotkeys
+" Press Ctrl + Shift + h to change to left tab
+" Press Ctrl + Shift + l to change to right tab
