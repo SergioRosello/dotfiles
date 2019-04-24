@@ -114,6 +114,8 @@ alias dvvt="vim ~/.vim/bundle/vimtex/doc/vimtex.txt"
 alias n="nnn"
 alias r="ranger"
 alias cal="cal -m"
+alias U="trizen -Syu --noconfirm"
+alias u="trizen -Syu"
 
 ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
 if [[ ! -d $ZSH_CACHE_DIR ]]; then

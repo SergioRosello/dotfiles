@@ -27,6 +27,16 @@ set softtabstop=0
 set shiftwidth=2
 set tabstop=2
 
+" Navigating with guides:
+" To navigate a document or a predefined template
+" we will assigh the string <++> to be our unique
+" identifier. When we press <leader><leader> this
+" will look for the next occourence of the previously
+" defined string and replace it and enter insert mode
+inoremap <leader><leader> <Esc>/<++><Enter>"_c4l
+vnoremap <leader><leader> <Esc>/<++><Enter>"_c4l
+map <leader><leader> <Esc>/<++><Enter>"_c4l
+
 " Copy to clipboard
 vnoremap  <leader>y  "+y
 nnoremap  <leader>Y  "+yg_
@@ -45,6 +55,17 @@ let g:ctrlp_show_hidden = 1
 " Python configuration for nvim (Set in healthcheck)
 let g:python_host_prog = '/usr/bin/python2'   " Python 2
 let g:python3_host_prog = '/usr/bin/python3'  " Python 3
+
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                       Autocommands
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+:autocmd BufNewFile,BufFilePre,BufRead *.md,*.issuea,*.issuei set filetype=markdown
+:autocmd BufNewFile *.issuea 0r ~/.vim/skeletonAndroid.issue
+:autocmd BufNewFile *.issuei 0r ~/.vim/skeletoniOS.issue
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"              Language Server Protocol config
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                Terminal related bindings                  
@@ -95,3 +116,9 @@ noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 nnoremap <leader>t :tabnew<CR>
 inoremap <leader>t <Esc>:tabnew<CR>
+
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                         autocompletions
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+" inoremap ENV[ ENV['']<Esc>hi
