@@ -237,7 +237,12 @@ exec_always --no-startup-id ~/.config/polybar/launchPolybar.sh
 #Multimedia keys
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -q sset Master 5%+
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -q sset Master 5%-
-bindsym XF86AudioMute exec --no-startup-id amixer -q sset Master toggle
+# Mutes volume, but is commented because I now use this to mute mic.
+#bindsym XF86AudioMute exec --no-startup-id amixer -q sset Master toggle
+
+# Mutes mic. from mouse
+bindsym XF86AudioMute exec --no-startup-id amixer set Capture toggle
+bindsym $mod+m exec --no-startup-id amixer set Capture toggle
 
 # Play/Pause
 bindsym XF86AudioPlay exec --no-startup-id dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause

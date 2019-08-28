@@ -2,6 +2,15 @@ set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 
 
+" Index
+"
+" General VIM settings
+" Autocommands
+" Terminal related bindings
+" Pane related bindings
+" Tab related bindings
+" Autocompletions
+"
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                General VIM settings
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -37,6 +46,9 @@ inoremap <leader><leader> <Esc>/<++><Enter>"_c4l
 vnoremap <leader><leader> <Esc>/<++><Enter>"_c4l
 map <leader><leader> <Esc>/<++><Enter>"_c4l
 
+" Change word to UPPER CASE in insert mode
+inoremap <c-u> <esc>viwUwi
+
 " Copy to clipboard
 vnoremap  <leader>y  "+y
 nnoremap  <leader>Y  "+yg_
@@ -56,16 +68,40 @@ let g:ctrlp_show_hidden = 1
 let g:python_host_prog = '/usr/bin/python2'   " Python 2
 let g:python3_host_prog = '/usr/bin/python3'  " Python 3
 
+" Load the search function from file.
+so ~/.vim/functions/SearchInProject.vim
+
+" Assign the command SearchInProject to the function SearchInProjectSergio.
+command! -nargs=+ SearchInProject :call SearchInProjectSergio(<q-args>, <q-args>)
+
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                       Autocommands
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-:autocmd BufNewFile,BufFilePre,BufRead *.md,*.issuea,*.issuei set filetype=markdown
-:autocmd BufNewFile *.issuea 0r ~/.vim/skeletonAndroid.issue
-:autocmd BufNewFile *.issuei 0r ~/.vim/skeletoniOS.issue
-"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-"              Language Server Protocol config
-"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+:augroup issues
+  " Delete all autocammands from this group.
+  " Used to prevent loading the autocommands
+  " when sourcing the init.vim file inside vim.
+  :autocmd!
+
+  " Tells Vim to interpret issuea and issuei files as markdown
+  :autocmd BufNewFile,BufFilePre,BufRead *.md,*.issuea,*.issuei set filetype=markdown
+
+  " Load the skeleton files when we create a issuea or issuei file ending
+  :autocmd BufNewFile *.issuea 0r ~/.vim/skeletons/skeletonAndroid.issue
+  :autocmd BufNewFile *.issuei 0r ~/.vim/skeletons/skeletoniOS.issue
+  
+  " Activate spelcheck to spanish when the files end in issuea or issuei
+  :autocmd BufNewFile *.issuea setlocal spell spelllang=es
+  :autocmd BufNewFile *.issuei setlocal spell spelllang=es
+:augroup END
+
+:augroup ruby
+  :autocmd!
+  " Create skeleton file for screens.
+  :autocmd BufNewFile *_screen.rb 0r ~/.vim/skeletons/skeletonScreen.rb
+:augroup END
+
 
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                Terminal related bindings                  
@@ -99,6 +135,12 @@ map <C-l> <C-w>l
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 
+" Edit vim on a vertical pane
+nnoremap <leader>cv :vsp ~/.config/nvim/init.vim<cr>
+
+" Source Vim on the recently changed configs
+nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
+
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                Tab related bindings
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -120,5 +162,9 @@ inoremap <leader>t <Esc>:tabnew<CR>
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                         autocompletions
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+
+" Copy the entire file into the system clipboard
+nnoremap <leader>yf gg"+yG
 
 " inoremap ENV[ ENV['']<Esc>hi
