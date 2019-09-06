@@ -105,7 +105,8 @@ command! -nargs=+ SearchInProject :call SearchInProjectSergio(<q-args>, <q-args>
 "                Visual appearence
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-colorscheme onedark"}}}
+colorscheme onedark
+"}}}
 
 " Autocommands {{{
 
@@ -123,8 +124,8 @@ colorscheme onedark"}}}
   :autocmd BufNewFile,BufFilePre,BufRead *.md,*.issuea,*.issuei set filetype=markdown
 
   " Load the skeleton files when we create a issuea or issuei file ending
-  :autocmd BufNewFile *.issuea 0r ~/.vim/skeletons/skeletonAndroid.issue
-  :autocmd BufNewFile *.issuei 0r ~/.vim/skeletons/skeletoniOS.issue
+  :autocmd BufNewFile *.issuea 0r ~/.local/share/nvim/skeletons/skeletonAndroid.issue
+  :autocmd BufNewFile *.issuei 0r ~/.local/share/nvim/skeletons/skeletoniOS.issue
   
   " Activate spelcheck to spanish when the files end in issuea or issuei
   :autocmd BufNewFile *.issuea setlocal spell spelllang=es
@@ -134,7 +135,7 @@ colorscheme onedark"}}}
 :augroup ruby
   :autocmd!
   " Create skeleton file for screens.
-  :autocmd BufNewFile *_screen.rb 0r ~/.vim/skeletons/skeletonScreen.rb
+  :autocmd BufNewFile *_screen.rb 0r ~/.local/share/nvim/skeletons/skeletonScreen.rb
 :augroup END
 
 " }}}
