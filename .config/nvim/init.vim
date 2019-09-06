@@ -1,21 +1,45 @@
-set runtimepath^=~/.vim runtimepath+=~/.vim/after
-let &packpath = &runtimepath
-
-
+"------------------------------
 " Index
 "
 " General VIM settings
+" Visual appearance
 " Autocommands
 " Terminal related bindings
 " Pane related bindings
 " Tab related bindings
 " Autocompletions
 "
+"------------------------------
+
+" Plugin managment{{{
+"
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                      Plugin managment
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+call plug#begin('~/.local/share/nvim/plugged')
+
+" Ctrl-p plugin
+Plug 'https://github.com/kien/ctrlp.vim'
+
+" Vim fugitive
+Plug 'https://github.com/tpope/vim-fugitive'
+
+" Vim sensible
+Plug 'https://github.com/tpope/vim-sensible'
+
+" Vim wiki - Wiki documentation and notes
+Plug 'https://github.com/vimwiki/vimwiki'
+
+
+call plug#end()
+"}}}
+
+" General Vim Settings {{{
+"
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                General VIM settings
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-execute pathogen#infect()
 let mapleader = ","
 syntax on
 filetype plugin indent on
@@ -73,6 +97,17 @@ so ~/.vim/functions/SearchInProject.vim
 
 " Assign the command SearchInProject to the function SearchInProjectSergio.
 command! -nargs=+ SearchInProject :call SearchInProjectSergio(<q-args>, <q-args>)
+" }}}
+
+" Visual appearence{{{
+"
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                Visual appearence
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+colorscheme onedark"}}}
+
+" Autocommands {{{
 
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                       Autocommands
@@ -102,6 +137,9 @@ command! -nargs=+ SearchInProject :call SearchInProjectSergio(<q-args>, <q-args>
   :autocmd BufNewFile *_screen.rb 0r ~/.vim/skeletons/skeletonScreen.rb
 :augroup END
 
+" }}}
+
+" Terminal related bindings {{{
 
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                Terminal related bindings                  
@@ -117,6 +155,9 @@ command! -nargs=* VT vsplit | terminal <args>
 " Unset number and relativenumber settings when the terminal is started
 au TermOpen * setlocal nonumber norelativenumber
 
+" }}}
+
+" Pane related bindings {{{
 
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                Pane related bindings
@@ -141,6 +182,16 @@ nnoremap <leader>cv :vsp ~/.config/nvim/init.vim<cr>
 " Source Vim on the recently changed configs
 nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
 
+" Fold the code
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim setlocal foldmethod=marker
+augroup END
+
+" }}}
+
+" Tab related bindings {{{
+
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                Tab related bindings
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -159,6 +210,10 @@ noremap <leader>0 :tablast<cr>
 nnoremap <leader>t :tabnew<CR>
 inoremap <leader>t <Esc>:tabnew<CR>
 
+" }}}
+
+" Autocompletions {{{
+
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                         autocompletions
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -168,3 +223,4 @@ inoremap <leader>t <Esc>:tabnew<CR>
 nnoremap <leader>yf gg"+yG
 
 " inoremap ENV[ ENV['']<Esc>hi
+" }}}
