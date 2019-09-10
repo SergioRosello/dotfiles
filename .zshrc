@@ -122,7 +122,7 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir $ZSH_CACHE_DIR
 fi
 #export java home
-export JAVA_HOME=/usr/lib/jvm/java-8-jdk/bin/java
+export JAVA_HOME=/usr/lib/jvm/default
 #export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 export ANDROID_HOME=/home/sergio/Android/Sdk
 export PATH=$ANDROID_HOME/tools:$PATH
