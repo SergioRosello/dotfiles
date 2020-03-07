@@ -19,7 +19,7 @@ secondary = #e60053
 alert = #bd2c40
 
 [bar/example]
-monitor = ${env:MONITOR:eDP1}
+monitor = ${env:MONITOR:}
 width = 100%
 height = 20
 ;offset-x = 1%
@@ -44,10 +44,11 @@ module-margin-left = 1
 module-margin-right = 2
 
 ;Default ones
-font-0 = fixed:pixelsize=10;1
-font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
-font-2 = "FontAwesome:size=10;0"
-font-3 = "Wuncon Siji:pixelsize=10;0"
+font-0 = JetBrains:pixelsize=11;1
+font-1 = fixed:pixelsize=10;1
+font-2 = unifont:fontformat=truetype:size=8:antialias=false;0
+font-3 = "FontAwesome:size=10;0"
+font-4 = "Wuncon Siji:pixelsize=10;0"
 
 ;modules-left = bspwm i3
 modules-left = i3
@@ -243,23 +244,7 @@ ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/eth]
 type = internal/network
-interface = enp0s20u1
-interval = 3.0
-
-format-connected-underline = #55aa55
-format-connected-prefix = " "
-format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = %local_ip%
-
-format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
-
-[module/eth2]
-type = internal/network
-interface = enp0s20u2
+interface = enp0s20u2u1
 interval = 3.0
 
 format-connected-underline = #55aa55

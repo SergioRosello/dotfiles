@@ -96,12 +96,12 @@ plugins=(
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # Configuration files
-alias cz="cd && vim .zshrc"
-alias ci3="cd && vim .config/i3/config"
-alias cv="cd && vim .vimrc" 
-alias ct="vim ~/.config/termite/config"
-alias cpb="vim ~/.config/polybar/config"
-alias cco="vim ~/.config/compton/compton.conf"
+alias cz="cd && nvim .zshrc"
+alias ci3="cd && nvim .config/i3/config"
+alias cv="cd && nvim ~/.config/nvim/init.vim" 
+alias ct="nvim ~/.config/termite/config"
+alias cpb="nvim ~/.config/polybar/config"
+alias cco="nvim ~/.config/compton/compton.conf"
 
 # Managing terminal as vim
 alias :q=exit
@@ -123,23 +123,25 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
 fi
 #export java home
 export JAVA_HOME=/usr/lib/jvm/default
-#export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 export ANDROID_HOME=/home/sergio/Android/Sdk
 export PATH=$ANDROID_HOME/tools:$PATH
 export PATH=$ANDROID_HOME/platform-tools:$PATH
 export PATH=$ANDROID_HOME/emulator:$PATH
 path+=('/home/sergio/.vscode-oss/extensions/ms-vscode.csharp-1.13.1/.omnisharp/run')
-#path+=($(ruby -e 'print Gem.user_dir')/bin)
 export GOPATH=$(go env GOPATH)
 export PATH=$PATH:$(go env GOPATH)/bin
 export PATH
+
+export XDG_CONFIG_HOME=$HOME/.config
 
 source $ZSH/oh-my-zsh.sh
 export VISUAL=vim
 
 # This line slows down the entrie loading process.
-source /usr/share/nvm/init-nvm.sh
+# source /usr/share/nvm/init-nvm.sh
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-source "$HOME/.rvm/scripts/rvm"
+# source "$HOME/.rvm/scripts/rvm"
+#path+=($(ruby -e 'print Gem.user_dir')/bin)
 export PATH="$PATH:$HOME/.rvm/bin"
+#export GEM_HOME=$(ruby -e 'print Gem.user_dir')

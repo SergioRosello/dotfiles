@@ -8,6 +8,8 @@
 " Pane related bindings
 " Tab related bindings
 " Autocompletions
+" Functions
+" COC plugin settings
 "
 "------------------------------
 
@@ -17,6 +19,10 @@
 "                      Plugin managment
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 call plug#begin('~/.local/share/nvim/plugged')
+
+" fzf plugin
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
 
 " Ctrl-p plugin
 Plug 'https://github.com/kien/ctrlp.vim'
@@ -30,6 +36,14 @@ Plug 'https://github.com/tpope/vim-sensible'
 " Vim wiki - Wiki documentation and notes
 Plug 'https://github.com/vimwiki/vimwiki'
 
+" Ruby linter and configuration
+Plug 'https://github.com/vim-ruby/vim-ruby'
+
+" Ruby environmant manager
+Plug 'https://github.com/tpope/vim-rbenv'
+
+" COC - Client Implementation of Language Server Protocol
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 "}}}
@@ -85,6 +99,12 @@ nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P<Paste>
 
+" Open fzf from insert or normal mode
+inoremap <silent><leader>o <ESC>:FZF<cr>
+nnoremap <silent><leader>o :FZF<cr>
+nnoremap <silent><leader>b :Buffers<cr>
+nnoremap <silent><leader>l :Lines<cr>
+
 " Enable Ctrl-p to see dotfiles
 let g:ctrlp_show_hidden = 1
 
@@ -119,6 +139,9 @@ colorscheme onedark
   " Used to prevent loading the autocommands
   " when sourcing the init.vim file inside vim.
   :autocmd!
+  
+  " Tells Vim to interpret geojson files as json
+  :autocmd BufNewFile,BufFilePre,BufRead *.geojson,*.GeoJson,*.geoJson set filetype=json
 
   " Tells Vim to interpret issuea and issuei files as markdown
   :autocmd BufNewFile,BufFilePre,BufRead *.md,*.issuea,*.issuei set filetype=markdown
@@ -223,5 +246,71 @@ inoremap <leader>t <Esc>:tabnew<CR>
 " Copy the entire file into the system clipboard
 nnoremap <leader>yf gg"+yG
 
-" inoremap ENV[ ENV['']<Esc>hi
-" }}}
+" Execute the CreateIssue function
+" This uploads the issue file to GitHub
+nnoremap <leader>ui :call CreateIssue()<cr>
+
+" Convert the current markdown file into pdf
+nnoremap <leader>e :! pandoc % -f markdown -t latex -s -o %:r.pdf<cr>
+
+" Open this file's pdf version with zathura
+" The second <cr> is to quit the prompt
+nnoremap <leader>v :! zathura %:r.pdf & ; disown<cr><cr>
+
+" Build document with latex
+nnoremap <leader>L :CocCommand latex.Build <cr>
+
+" Call MakeAndViewPDF to generate the PDF from the .md file and view it.
+nnoremap <leader>E :call MakeAndViewPDF()<cr>
+
+"}}}
+
+" Functions{{{
+
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                         Functions
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+" Upload a issue to Github, based on it's path
+" TODO: Output the script's command in a preview-window
+function CreateIssue()
+  execute "terminal"  "ruby" "/home/sergio/Documents/Wave/Code/createIssue/issueCreator.rb" getcwd() . "/" . bufname("%")
+endfunction
+
+function MakeAndViewPDF()
+  silent !pandoc % -f markdown -t latex -s -o %:r.pdf
+  silent !zathura %:r.pdf & ; disown
+endfunction
+
+"}}}
+
+" COC plugin settings{{{
+"
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                         Functions
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+" To load and install solargraph if it is not installed previously
+let g:coc_global_extensions = ['coc-solargraph']
+
+" Remap keys for gotos
+nmap <silent> <leader>gd <Plug>(coc-definition)
+nmap <silent> <leader>gt <Plug>(coc-type-definition)
+nmap <silent> <leader>gi <Plug>(coc-implementation)
+nmap <silent> <leader>gf <Plug>(coc-references)
+
+" Map <tab> to trigger completion and navigate to the next item: >
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+" To get correct comment highlighting on JSON files
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+"}}}
