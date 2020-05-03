@@ -27,6 +27,12 @@ Plug 'junegunn/fzf.vim'
 " Ctrl-p plugin
 Plug 'https://github.com/kien/ctrlp.vim'
 
+" Vim repeat
+Plug 'https://github.com/tpope/vim-repeat'
+
+" Vim surround
+Plug 'https://github.com/tpope/vim-surround'
+
 " Vim fugitive
 Plug 'https://github.com/tpope/vim-fugitive'
 
@@ -73,6 +79,7 @@ set copyindent
 set softtabstop=0
 set shiftwidth=2
 set tabstop=2
+"set statusline^=%{coc#status()}
 
 " Navigating with guides:
 " To navigate a document or a predefined template
@@ -242,6 +249,29 @@ inoremap <leader>t <Esc>:tabnew<CR>
 "                         autocompletions
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
+" MARKDOWN
+
+" Insert inline code in markdown
+nmap mc i`<++>` <++><esc>,,
+imap <leader>C `<++>` <++>,,
+
+" Insert url in markdown
+nnoremap mu o<cr>[<++>](<++>)<esc>0
+inoremap <leader>mu <esc>o<cr>[<++>](<++>)<esc>0
+
+" Insert image in markdown
+nnoremap mI o<cr>![<++>](./<++>)<esc>0
+inoremap <leader>mI <esc>o<cr>![<++>](./<++>)<esc>0
+
+" Insert italic bullet point in markdown
+nnoremap mib o* *<++>:* <++><esc>0
+inoremap <leader>mib <esc>o* *<++>:* <++><esc>0
+
+" Insert bold bullet point in markdown
+nnoremap mbb o* **<++>:** <++><esc>0
+inoremap <leader>mbb <esc>o* **<++>:** <++><esc>0
+
+" SYSTEM CLIPBOARD
 
 " Copy the entire file into the system clipboard
 nnoremap <leader>yf gg"+yG
@@ -262,6 +292,9 @@ nnoremap <leader>L :CocCommand latex.Build <cr>
 
 " Call MakeAndViewPDF to generate the PDF from the .md file and view it.
 nnoremap <leader>E :call MakeAndViewPDF()<cr>
+
+" Correct spell automatically with Vim's first suggestion
+let @s = ']s1z=@s'
 
 "}}}
 

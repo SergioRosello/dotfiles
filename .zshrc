@@ -135,13 +135,21 @@ export PATH
 export XDG_CONFIG_HOME=$HOME/.config
 
 source $ZSH/oh-my-zsh.sh
-export VISUAL=vim
+export VISUAL=nvim
+
+# FZF commands
+# --files: List files that would be searched but do not search
+# --no-ignore: Do not respect .gitignore, etc...
+# --hidden: Search hidden files and folders
+# --follow: Follow symlinks
+# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 
 # This line slows down the entrie loading process.
-# source /usr/share/nvm/init-nvm.sh
+ source /usr/share/nvm/init-nvm.sh
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-# source "$HOME/.rvm/scripts/rvm"
-#path+=($(ruby -e 'print Gem.user_dir')/bin)
+source "$HOME/.rvm/scripts/rvm"
+path+=($(ruby -e 'print Gem.user_dir')/bin)
 export PATH="$PATH:$HOME/.rvm/bin"
-#export GEM_HOME=$(ruby -e 'print Gem.user_dir')
+export GEM_HOME=$(ruby -e 'print Gem.user_dir')

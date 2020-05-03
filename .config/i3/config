@@ -295,7 +295,7 @@ bindsym $mod+b exec --no-startup-id i3lock
 bindsym $mod+q exec --no-startup-id qutebrowser
 
 #Set the wallpaper
-exec_always feh --bg-scale /home/sergio/Pictures/Wallpaper.*
+exec_always feh --bg-scale /home/sergio/Pictures/Wallpaper.jpg
 
 #Open urgent windows
 bindsym $mod+x [urgent=latest] focus
