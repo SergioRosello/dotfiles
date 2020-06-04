@@ -119,11 +119,6 @@ let g:ctrlp_show_hidden = 1
 let g:python_host_prog = '/usr/bin/python2'   " Python 2
 let g:python3_host_prog = '/usr/bin/python3'  " Python 3
 
-" Load the search function from file.
-so ~/.vim/functions/SearchInProject.vim
-
-" Assign the command SearchInProject to the function SearchInProjectSergio.
-command! -nargs=+ SearchInProject :call SearchInProjectSergio(<q-args>, <q-args>)
 " }}}
 
 " Visual appearence{{{
@@ -132,7 +127,7 @@ command! -nargs=+ SearchInProject :call SearchInProjectSergio(<q-args>, <q-args>
 "                Visual appearence
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-colorscheme onedark
+"colorscheme onedark
 "}}}
 
 " Autocommands {{{

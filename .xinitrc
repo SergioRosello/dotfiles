@@ -9,9 +9,11 @@ case $WM in
   dwm)
     # Enter X session configuration commands here
     # Execute the command to set the background 
-    ~/.fehbg & 
+    # ~/.fehbg & 
     while true; do
       INFO=""
+      INFO+=" $(cat /sys/class/power_supply/BAT0/capacity)% | "
+      INFO+="$(iw dev wlp0s20f3 info | grep ssid | awk '{print $2}') | "
       INFO+=$(date +"%a %d/%m/%y")
       INFO+=$(date +" %H:%M")
       xsetroot -name "$INFO"
@@ -27,4 +29,4 @@ esac
 # Setup monitor configuration.
 autorandr -c
 
-exec $WM
+exec dbus-launch $WM
