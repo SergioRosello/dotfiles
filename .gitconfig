@@ -1,0 +1,5 @@
+[user]
+	name = SergioRosello
+	email = sergio-rosello@hotmail.com\n
+[core]
+	editor = nvim
