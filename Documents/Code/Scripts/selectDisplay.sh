@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# This script uses autorandr and its preconfigured user display options 
+# to allow user to set the desired display configuration
+#
+
+# Read display configuration options
+function read_options {
+  OPTIONS="$(autorandr)"
+  OPTIONS+=" arandr"
+}
+
+# Format configuration options
+# outputted by read_options
+function format_display_options {
+  # Reset OPTIONS to exclude unwanted words and substitutes spaces for \n
+  OPTIONS=$(echo $OPTIONS | sed 's/([^)]*)//g;s/[[:blank:]]\+/\\n/g')
+}
+
+
+# Stores the user's decision
+function user_chose_display {
+  CHOICE=$(echo -e $OPTIONS | dmenu -i -p 'Select display option:')
+}
+
+# Apply user's decision
+# To apply the user's decision, we will have to:
+# autorandr -l $CHOICE
+function apply_decision {
+  if [[ ${CHOICE} = 'arandr' ]]; then
+    arandr &
+  else
+    autorandr -l $CHOICE
+  fi
+}
+
+
+read_options
+format_display_options
+user_chose_display
+apply_decision
+apply_decision
