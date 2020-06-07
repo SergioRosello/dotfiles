@@ -54,23 +54,22 @@ function toggle_microphone {
   fi
 }
 
-# function that sends dunstify or notify-send command to user
-# With current audio satatus
-# function notify_audio_change {
-# }
-
 # Manage parameters and send to defined function
-# function manage_input {
-# }
+args=("$@")
+case ${args[0]} in
+  "+")
+    increase_volume
+    ;;
+  "-")
+    decrease_volume
+    ;;
+  "s")
+    toggle_speaker_audio
+    ;;
+  "m")
+    toggle_microphone
+    ;;
+  *)
+    echo "Something went wrong"
+esac
 
-increase_volume
-sleep 1
-decrease_volume
-sleep 1
-toggle_microphone
-sleep 1
-toggle_microphone
-sleep 1
-toggle_speaker_audio
-sleep 1
-toggle_speaker_audio
