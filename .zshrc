@@ -71,7 +71,8 @@ ZSH_THEME="robbyrussell"
 plugins=(git z)
 
 source $ZSH/oh-my-zsh.sh
-PATH+=/home/sergio/.local/bin
+PATH+=:/home/sergio/.local/bin
+PATH+=:/home/sergio/Documents/Code/Scripts
 
 # User configuration
 
