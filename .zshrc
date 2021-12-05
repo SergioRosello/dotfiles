@@ -73,10 +73,18 @@ plugins=(git z)
 source $ZSH/oh-my-zsh.sh
 PATH+=:/home/sergio/.local/bin
 PATH+=:/home/sergio/Documents/Code/Scripts
+PATH+=:/home/sergio/go/bin
+
+# Sourcing Rust env
+source $HOME/.cargo/env
+
+#PATH+=:/home/sergio/.cargo/env
 
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
+
+export BROWSER=firefox
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8

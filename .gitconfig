@@ -3,3 +3,5 @@
 	email = sergio-rosello@hotmail.com\n
 [core]
 	editor = nvim
+[init]
+	templatedir = ~/.git_template

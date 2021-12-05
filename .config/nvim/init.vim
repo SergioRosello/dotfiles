@@ -20,12 +20,22 @@
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 call plug#begin('~/.local/share/nvim/plugged')
 
+" NVIM LSP - Wait until stable release
+" TODO: Finish configuration - Look at the bottom of this document
+Plug 'neovim/nvim-lspconfig'
+
+" Treesitter
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
+" Plug 'ray-x/guihua.lua', {'do': 'cd lua/fzy && make' }
+" Plug 'ray-x/navigator.lua'
+
 " fzf plugin
 Plug 'junegunn/fzf', { 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
-" Ctrl-p plugin
-Plug 'https://github.com/kien/ctrlp.vim'
+" Vim airline font
+Plug 'https://github.com/rakr/vim-one'
 
 " Vim repeat
 Plug 'https://github.com/tpope/vim-repeat'
@@ -39,17 +49,10 @@ Plug 'https://github.com/tpope/vim-fugitive'
 " Vim sensible
 Plug 'https://github.com/tpope/vim-sensible'
 
-" Vim wiki - Wiki documentation and notes
-Plug 'https://github.com/vimwiki/vimwiki'
+Plug 'https://github.com/honza/vim-snippets'
 
-" Ruby linter and configuration
-Plug 'https://github.com/vim-ruby/vim-ruby'
-
-" Ruby environmant manager
-Plug 'https://github.com/tpope/vim-rbenv'
-
-" COC - Client Implementation of Language Server Protocol
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Goyo, to write distraction-free
+Plug 'junegunn/goyo.vim'
 
 call plug#end()
 "}}}
@@ -69,7 +72,9 @@ set virtualedit=onemore
 set history=1000
 set autoindent
 set relativenumber
+set digraph
 set number
+set cursorline
 " Enable autocompletion
 set wildmode=longest,list,full
 " Changes tabs to spaces, used for calabash and ruby
@@ -87,9 +92,9 @@ set tabstop=2
 " identifier. When we press <leader><leader> this
 " will look for the next occourence of the previously
 " defined string and replace it and enter insert mode
-inoremap <leader><leader> <Esc>/<++><Enter>"_c4l
-vnoremap <leader><leader> <Esc>/<++><Enter>"_c4l
-map <leader><leader> <Esc>/<++><Enter>"_c4l
+inoremap <leader><leader> <Esc>/<++><Enter>"_c4l<Esc>:nohlsearch<Enter>a
+vnoremap <leader><leader> <Esc>/<++><Enter>"_c4l<Esc>:nohlsearch<Enter>a
+map <leader><leader> <Esc>/<++><Enter>"_c4l<Esc>:nohlsearch<Enter>a
 
 " Change word to UPPER CASE in insert mode
 inoremap <c-u> <esc>viwUwi
@@ -99,6 +104,9 @@ vnoremap  <leader>y  "+y
 nnoremap  <leader>Y  "+yg_
 nnoremap  <leader>y  "+y
 nnoremap  <leader>yy  "+yy
+
+" Insert accents in normal mode
+nnoremap <silent> ' s<c-r>"<bs>'<esc>
 
 " Paste from clipboard
 nnoremap <leader>p "+p
@@ -118,7 +126,6 @@ let g:ctrlp_show_hidden = 1
 " Python configuration for nvim (Set in healthcheck)
 let g:python_host_prog = '/usr/bin/python2'   " Python 2
 let g:python3_host_prog = '/usr/bin/python3'  " Python 3
-
 " }}}
 
 " Visual appearence{{{
@@ -127,7 +134,13 @@ let g:python3_host_prog = '/usr/bin/python3'  " Python 3
 "                Visual appearence
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-"colorscheme onedark
+" Set theme to one
+let g:airline_theme='one'
+
+colorscheme one
+" set background=dark " for the dark version
+set background=light " for the light version
+
 "}}}
 
 " Autocommands {{{
@@ -136,25 +149,39 @@ let g:python3_host_prog = '/usr/bin/python3'  " Python 3
 "                       Autocommands
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-:augroup issues
+:augroup spelling
   " Delete all autocammands from this group.
   " Used to prevent loading the autocommands
   " when sourcing the init.vim file inside vim.
   :autocmd!
   
   " Tells Vim to interpret geojson files as json
-  :autocmd BufNewFile,BufFilePre,BufRead *.geojson,*.GeoJson,*.geoJson set filetype=json
+  " :autocmd BufNewFile,BufFilePre,BufRead *.geojson,*.GeoJson,*.geoJson set filetype=json
 
   " Tells Vim to interpret issuea and issuei files as markdown
-  :autocmd BufNewFile,BufFilePre,BufRead *.md,*.issuea,*.issuei set filetype=markdown
+  " :autocmd BufNewFile,BufFilePre,BufRead *.md,*.issuea,*.issuei set filetype=markdown
 
   " Load the skeleton files when we create a issuea or issuei file ending
-  :autocmd BufNewFile *.issuea 0r ~/.local/share/nvim/skeletons/skeletonAndroid.issue
-  :autocmd BufNewFile *.issuei 0r ~/.local/share/nvim/skeletons/skeletoniOS.issue
+  " :autocmd BufNewFile *.issuea 0r ~/.local/share/nvim/skeletons/skeletonAndroid.issue
+  " :autocmd BufNewFile *.issuei 0r ~/.local/share/nvim/skeletons/skeletoniOS.issue
   
-  " Activate spelcheck to spanish when the files end in issuea or issuei
-  :autocmd BufNewFile *.issuea setlocal spell spelllang=es
-  :autocmd BufNewFile *.issuei setlocal spell spelllang=es
+  " Activate spelcheck when the files end in .tex
+  :autocmd BufNewFile,BufReadPre *.tex setlocal spell spelllang=es,en_us
+  :autocmd BufNewFile,BufReadPre *.bib setlocal spell spelllang=es
+  " Activate spelcheck when the files end in md
+  :autocmd BufNewFile,BufReadPre *.md setlocal spell spelllang=es
+  :autocmd BufNewFile,BufReadPre *.markdown setlocal spell spelllang=es
+:augroup END
+
+" Ensure session is loaded when vim is started
+" Ensure session is saved when vim is exitted
+" TODO: Commented because it does not handle well.
+" It sources the .ses.vim every time, and I don't want that to happem.
+" Have to think of a better solution
+:augroup starup
+: autocmd!
+: autocmd VimLeave * mksession! .ses.vim
+": autocmd VimEnter * source .ses.vim
 :augroup END
 
 :augroup ruby
@@ -233,8 +260,8 @@ noremap <leader>7 7gt
 noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
-nnoremap <leader>t :tabnew<CR>
-inoremap <leader>t <Esc>:tabnew<CR>
+nnoremap <leader>T :tabnew<CR>
+inoremap <leader>T <Esc>:tabnew<CR>
 
 " }}}
 
@@ -262,6 +289,10 @@ inoremap <leader>mI <esc>o<cr>![<++>](./<++>)<esc>0
 nnoremap mib o* *<++>:* <++><esc>0
 inoremap <leader>mib <esc>o* *<++>:* <++><esc>0
 
+" Insert markdown bullet point link with description
+nnoremap ml o1. [<++>](<++>) <++><esc>0
+inoremap <leader>ml <esc>o1. [<++>](<++>) <++><esc>0
+
 " Insert bold bullet point in markdown
 nnoremap mbb o* **<++>:** <++><esc>0
 inoremap <leader>mbb <esc>o* **<++>:** <++><esc>0
@@ -270,10 +301,6 @@ inoremap <leader>mbb <esc>o* **<++>:** <++><esc>0
 
 " Copy the entire file into the system clipboard
 nnoremap <leader>yf gg"+yG
-
-" Execute the CreateIssue function
-" This uploads the issue file to GitHub
-nnoremap <leader>ui :call CreateIssue()<cr>
 
 " Convert the current markdown file into pdf
 nnoremap <leader>e :! pandoc % -f markdown -t latex -s -o %:r.pdf<cr>
@@ -291,6 +318,14 @@ nnoremap <leader>E :call MakeAndViewPDF()<cr>
 " Correct spell automatically with Vim's first suggestion
 let @s = ']s1z=@s'
 
+" File directory structure and organization
+" with netrw
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+nnoremap - :Ex<cr>
+nnoremap < :Vex<cr>
+nnoremap > :Sex<cr>
+
 "}}}
 
 " Functions{{{
@@ -299,12 +334,6 @@ let @s = ']s1z=@s'
 "                         Functions
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-" Upload a issue to Github, based on it's path
-" TODO: Output the script's command in a preview-window
-function CreateIssue()
-  execute "terminal"  "ruby" "/home/sergio/Documents/Wave/Code/createIssue/issueCreator.rb" getcwd() . "/" . bufname("%")
-endfunction
-
 function MakeAndViewPDF()
   silent !pandoc % -f markdown -t latex -s -o %:r.pdf
   silent !zathura %:r.pdf & ; disown
@@ -312,33 +341,61 @@ endfunction
 
 "}}}
 
-" COC plugin settings{{{
+" Tablist Management{{{
 "
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 "                         Functions
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-" To load and install solargraph if it is not installed previously
-let g:coc_global_extensions = ['coc-solargraph']
 
-" Remap keys for gotos
-nmap <silent> <leader>gd <Plug>(coc-definition)
-nmap <silent> <leader>gt <Plug>(coc-type-definition)
-nmap <silent> <leader>gi <Plug>(coc-implementation)
-nmap <silent> <leader>gf <Plug>(coc-references)
+nnoremap <leader>t :TlistToggle<cr>
+let Tlist_GainFocus_On_ToggleOpen = 1
+"}}}
 
-" Map <tab> to trigger completion and navigate to the next item: >
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
+" nvim-lspconfig configuration{{{
+"
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                         Functions
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+lua <<
+  require'lspconfig'.clangd.setup{ }
+.
 
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+"}}}
 
-" To get correct comment highlighting on JSON files
-autocmd FileType json syntax match Comment +\/\/.\+$+
+" Treesitter plugin managment{{{
+"
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                         Treesitter
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = {"go"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
+  ignore_install = { "javascript" }, -- List of parsers to ignore installing
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    disable = { "c", "rust" },  -- list of language that will be disabled
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
+EOF
+
+"}}}
+
+" Golang plugin managment{{{
+"
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                         Golang
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+lua require("lsp_config")
+
+autocmd BufWritePre *.go lua vim.lsp.buf.formatting()
+autocmd BufWritePre *.go lua goimports(2000)
 "}}}
