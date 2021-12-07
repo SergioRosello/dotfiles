@@ -138,8 +138,10 @@ let g:python3_host_prog = '/usr/bin/python3'  " Python 3
 let g:airline_theme='one'
 
 colorscheme one
-" set background=dark " for the dark version
-set background=light " for the light version
+set background=dark " for the dark version
+" set background=light " for the light version
+" Fix background error; not showing floating window correctly
+highlight Pmenu ctermbg=gray guibg=gray
 
 "}}}
 
