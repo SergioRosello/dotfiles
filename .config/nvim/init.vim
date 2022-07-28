@@ -24,6 +24,10 @@ call plug#begin('~/.local/share/nvim/plugged')
 " TODO: Finish configuration - Look at the bottom of this document
 Plug 'neovim/nvim-lspconfig'
 
+" Telescope - for opening and finding files
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+
 " Treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
@@ -35,7 +39,7 @@ Plug 'junegunn/fzf', { 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
 " Vim airline font
-Plug 'https://github.com/rakr/vim-one'
+" Plug 'https://github.com/rakr/vim-one'
 
 " Vim repeat
 Plug 'https://github.com/tpope/vim-repeat'
@@ -50,6 +54,9 @@ Plug 'https://github.com/tpope/vim-fugitive'
 Plug 'https://github.com/tpope/vim-sensible'
 
 Plug 'https://github.com/honza/vim-snippets'
+
+" Goyo, to write distraction-free
+Plug 'ray-x/aurora'
 
 " Goyo, to write distraction-free
 Plug 'junegunn/goyo.vim'
@@ -134,14 +141,8 @@ let g:python3_host_prog = '/usr/bin/python3'  " Python 3
 "                Visual appearence
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-" Set theme to one
-let g:airline_theme='one'
-
-colorscheme one
-set background=dark " for the dark version
-" set background=light " for the light version
-" Fix background error; not showing floating window correctly
-highlight Pmenu ctermbg=gray guibg=gray
+" Set theme to aurora
+colorscheme aurora
 
 "}}}
 
@@ -173,23 +174,6 @@ highlight Pmenu ctermbg=gray guibg=gray
   " Activate spelcheck when the files end in md
   :autocmd BufNewFile,BufReadPre *.md setlocal spell spelllang=es
   :autocmd BufNewFile,BufReadPre *.markdown setlocal spell spelllang=es
-:augroup END
-
-" Ensure session is loaded when vim is started
-" Ensure session is saved when vim is exitted
-" TODO: Commented because it does not handle well.
-" It sources the .ses.vim every time, and I don't want that to happem.
-" Have to think of a better solution
-:augroup starup
-: autocmd!
-: autocmd VimLeave * mksession! .ses.vim
-": autocmd VimEnter * source .ses.vim
-:augroup END
-
-:augroup ruby
-  :autocmd!
-  " Create skeleton file for screens.
-  :autocmd BufNewFile *_screen.rb 0r ~/.local/share/nvim/skeletons/skeletonScreen.rb
 :augroup END
 
 " }}}
@@ -354,15 +338,17 @@ nnoremap <leader>t :TlistToggle<cr>
 let Tlist_GainFocus_On_ToggleOpen = 1
 "}}}
 
-" nvim-lspconfig configuration{{{
+" telescope configuration{{{
 "
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-"                         Functions
+"                         Telescope
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-lua <<
-  require'lspconfig'.clangd.setup{ }
-.
+lua require("telescope_config")
 
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 "}}}
 
 " Treesitter plugin managment{{{
