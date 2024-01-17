@@ -20,26 +20,20 @@
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 call plug#begin('~/.local/share/nvim/plugged')
 
-" NVIM LSP - Wait until stable release
-" TODO: Finish configuration - Look at the bottom of this document
+Plug 'tyrossel/MarkdownTable.nvim'
+
+" NVIM Language Server Protocol
 Plug 'neovim/nvim-lspconfig'
 
-" Telescope - for opening and finding files
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+" NVIM debugger configuration 
+" Have also installed Delve, as a go package
+Plug 'mfussenegger/nvim-dap'
+Plug 'leoluz/nvim-dap-go'
+Plug 'rcarriga/nvim-dap-ui'
 
 " Treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-
-" Plug 'ray-x/guihua.lua', {'do': 'cd lua/fzy && make' }
-" Plug 'ray-x/navigator.lua'
-
-" fzf plugin
-Plug 'junegunn/fzf', { 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
-
-" Vim airline font
-" Plug 'https://github.com/rakr/vim-one'
+Plug 'https://github.com/BurntSushi/ripgrep'
 
 " Vim repeat
 Plug 'https://github.com/tpope/vim-repeat'
@@ -53,13 +47,23 @@ Plug 'https://github.com/tpope/vim-fugitive'
 " Vim sensible
 Plug 'https://github.com/tpope/vim-sensible'
 
-Plug 'https://github.com/honza/vim-snippets'
-
-" Goyo, to write distraction-free
-Plug 'ray-x/aurora'
-
 " Goyo, to write distraction-free
 Plug 'junegunn/goyo.vim'
+
+" Theme, this makes nvim pretty
+Plug 'ray-x/aurora'
+
+" Both required for telescope
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" File explorer
+Plug 'nvim-tree/nvim-web-devicons' " optional, for file icons
+Plug 'nvim-tree/nvim-tree.lua'
+
+" bluloco theme
+Plug 'https://github.com/uloco/bluloco.nvim'
+Plug 'https://github.com/rktjmp/lush.nvim'
 
 call plug#end()
 "}}}
@@ -78,9 +82,9 @@ set autowrite
 set virtualedit=onemore
 set history=1000
 set autoindent
-set relativenumber
-set digraph
-set number
+"set relativenumber
+" set digraph
+"set number
 set cursorline
 " Enable autocompletion
 set wildmode=longest,list,full
@@ -141,8 +145,14 @@ let g:python3_host_prog = '/usr/bin/python3'  " Python 3
 "                Visual appearence
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-" Set theme to aurora
-colorscheme aurora
+" Set theme to one
+" let g:airline_theme='one'
+
+colorscheme bluloco
+" set background=light " for the light version
+" set background=dark  " for the dark version
+" Fix background error; not showing floating window correctly
+highlight Pmenu ctermbg=gray guibg=gray
 
 "}}}
 
@@ -152,29 +162,33 @@ colorscheme aurora
 "                       Autocommands
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-:augroup spelling
+
+" Autocomplete word on tab enter.
+inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
+
+" Export a markdown document to pdf
+nnoremap <leader>e :!pandoc --to=latex --from=markdown -o %:r.pdf % <cr>
+
+nnoremap <leader><Tab> :NvimTreeToggle<CR>
+
+lua <<EOF
+require('autocommands')
+EOF
+
+":augroup spelling
   " Delete all autocammands from this group.
   " Used to prevent loading the autocommands
   " when sourcing the init.vim file inside vim.
-  :autocmd!
-  
-  " Tells Vim to interpret geojson files as json
-  " :autocmd BufNewFile,BufFilePre,BufRead *.geojson,*.GeoJson,*.geoJson set filetype=json
-
-  " Tells Vim to interpret issuea and issuei files as markdown
-  " :autocmd BufNewFile,BufFilePre,BufRead *.md,*.issuea,*.issuei set filetype=markdown
-
-  " Load the skeleton files when we create a issuea or issuei file ending
-  " :autocmd BufNewFile *.issuea 0r ~/.local/share/nvim/skeletons/skeletonAndroid.issue
-  " :autocmd BufNewFile *.issuei 0r ~/.local/share/nvim/skeletons/skeletoniOS.issue
+  ":autocmd!
   
   " Activate spelcheck when the files end in .tex
-  :autocmd BufNewFile,BufReadPre *.tex setlocal spell spelllang=es,en_us
-  :autocmd BufNewFile,BufReadPre *.bib setlocal spell spelllang=es
+  ":autocmd BufNewFile,BufReadPre *.tex setlocal spell spelllang=es,en_us
+  ":autocmd BufNewFile,BufReadPre *.bib setlocal spell spelllang=es
   " Activate spelcheck when the files end in md
-  :autocmd BufNewFile,BufReadPre *.md setlocal spell spelllang=es
-  :autocmd BufNewFile,BufReadPre *.markdown setlocal spell spelllang=es
-:augroup END
+  ":autocmd BufNewFile,BufReadPre *.md setlocal spell spelllang=es,en_us
+  ":autocmd BufNewFile,BufReadPre *.markdown setlocal spell spelllang=es
+":augroup END
+
 
 " }}}
 
@@ -215,11 +229,17 @@ map <C-l> <C-w>l
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 
-" Edit vim on a vertical pane
-nnoremap <leader>cv :vsp ~/.config/nvim/init.vim<cr>
+" Edit Telescope on a buffer
+nnoremap <leader>cl :e ~/.config/nvim/lua/<cr>
+" Edit Telescope on a buffer
+nnoremap <leader>cll :e ~/.config/nvim/lua/lsp_config.lua<cr>
+" Edit Telescope on a buffer
+nnoremap <leader>clt :e ~/.config/nvim/lua/tlcp_config.lua<cr>
+" Edit nvim on a buffer
+nnoremap <leader>cv :e ~/.config/nvim/init.vim<cr>
 
 " Source Vim on the recently changed configs
-nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
+" nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
 
 " Fold the code
 augroup filetype_vim
@@ -257,49 +277,40 @@ inoremap <leader>T <Esc>:tabnew<CR>
 "                         autocompletions
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-" MARKDOWN
+" augroup markdown
+    " autocmd!
+    " MARKDOWN
 
-" Insert inline code in markdown
-nmap mc i`<++>` <++><esc>,,
-imap <leader>C `<++>` <++>,,
+    " Insert inline code in markdown
+    " autocmd FileType markdown nmap mc i`<++>` <++><esc>,,
+    " autocmd FileType markdown imap <leader>C `<++>` <++>,,
 
-" Insert url in markdown
-nnoremap mu o<cr>[<++>](<++>)<esc>0
-inoremap <leader>mu <esc>o<cr>[<++>](<++>)<esc>0
+    " Insert url in markdown
+    " nnoremap mu o<cr>[<++>](<++>)<esc>0
+    " inoremap <leader>mu <esc>o<cr>[<++>](<++>)<esc>0
 
-" Insert image in markdown
-nnoremap mI o<cr>![<++>](./<++>)<esc>0
-inoremap <leader>mI <esc>o<cr>![<++>](./<++>)<esc>0
+    " Insert image in markdown
+    " nnoremap mI o<cr>![<++>](./<++>)<esc>0
+    " inoremap <leader>mI <esc>o<cr>![<++>](./<++>)<esc>0
 
-" Insert italic bullet point in markdown
-nnoremap mib o* *<++>:* <++><esc>0
-inoremap <leader>mib <esc>o* *<++>:* <++><esc>0
+    " Insert italic bullet point in markdown
+    " nnoremap mib o* *<++>:* <++><esc>0
+    " inoremap <leader>mib <esc>o* *<++>:* <++><esc>0
 
-" Insert markdown bullet point link with description
-nnoremap ml o1. [<++>](<++>) <++><esc>0
-inoremap <leader>ml <esc>o1. [<++>](<++>) <++><esc>0
+    " Insert markdown bullet point link with description
+    " nnoremap ml o1. [<++>](<++>) <++><esc>0
+    " inoremap <leader>ml <esc>o1. [<++>](<++>) <++><esc>0
 
-" Insert bold bullet point in markdown
-nnoremap mbb o* **<++>:** <++><esc>0
-inoremap <leader>mbb <esc>o* **<++>:** <++><esc>0
+    " Insert bold bullet point in markdown
+    " nnoremap mbb o* **<++>:** <++><esc>0
+    " inoremap <leader>mbb <esc>o* **<++>:** <++><esc>0
+
+" augroup end
 
 " SYSTEM CLIPBOARD
 
 " Copy the entire file into the system clipboard
 nnoremap <leader>yf gg"+yG
-
-" Convert the current markdown file into pdf
-nnoremap <leader>e :! pandoc % -f markdown -t latex -s -o %:r.pdf<cr>
-
-" Open this file's pdf version with zathura
-" The second <cr> is to quit the prompt
-nnoremap <leader>v :! zathura %:r.pdf & ; disown<cr><cr>
-
-" Build document with latex
-nnoremap <leader>L :CocCommand latex.Build <cr>
-
-" Call MakeAndViewPDF to generate the PDF from the .md file and view it.
-nnoremap <leader>E :call MakeAndViewPDF()<cr>
 
 " Correct spell automatically with Vim's first suggestion
 let @s = ']s1z=@s'
@@ -308,9 +319,6 @@ let @s = ']s1z=@s'
 " with netrw
 let g:netrw_liststyle = 3
 let g:netrw_banner = 0
-nnoremap - :Ex<cr>
-nnoremap < :Vex<cr>
-nnoremap > :Sex<cr>
 
 "}}}
 
@@ -320,10 +328,27 @@ nnoremap > :Sex<cr>
 "                         Functions
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-function MakeAndViewPDF()
-  silent !pandoc % -f markdown -t latex -s -o %:r.pdf
-  silent !zathura %:r.pdf & ; disown
+" function MakeAndViewPDF()
+  " silent !pandoc % -f markdown -t latex -s -o %:r.pdf
+  " silent !zathura %:r.pdf & ; disown
+" endfunction
+
+"Use TAB to complete when typing words, else inserts TABs as usual.
+"Uses dictionary and source files to find matching words to complete.
+
+"See help completion for source,
+"Note: usual completion is on <C-n> but more trouble to press all the time.
+"Never type the same word twice and maybe learn a new spellings!
+"Use the Linux dictionary when spelling is in doubt.
+"Window users can copy the file to their machine.
+function! Tab_Or_Complete()
+  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
 endfunction
+:set dictionary="/usr/dict/words"
 
 "}}}
 
@@ -338,17 +363,17 @@ nnoremap <leader>t :TlistToggle<cr>
 let Tlist_GainFocus_On_ToggleOpen = 1
 "}}}
 
-" telescope configuration{{{
+" nvim-lspconfig configuration{{{
 "
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-"                         Telescope
+"                         LSP Config
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-lua require("telescope_config")
 
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+lua require('lsp_config')
+
+autocmd BufWritePre *.go :silent! lua vim.lsp.buf.format()
+autocmd BufWritePre *.go :silent! lua goimports(2000)
+
 "}}}
 
 " Treesitter plugin managment{{{
@@ -376,14 +401,32 @@ EOF
 
 "}}}
 
-" Golang plugin managment{{{
+" Telescope plugin managment{{{
 "
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-"                         Golang
+"                         Telescope
 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-lua require("lsp_config")
+lua require('tlcp_config')
 
-autocmd BufWritePre *.go lua vim.lsp.buf.formatting()
-autocmd BufWritePre *.go lua goimports(2000)
+"}}}
+
+" nvim-tree plugin managment{{{
+"
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                         nvim-tree
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+lua require('tree_config')
+
+"}}}
+
+" dap plugin managment{{{
+"
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+"                         nvim-tree
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+lua require('_dap')
+
 "}}}
